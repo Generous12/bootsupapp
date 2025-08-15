@@ -1,0 +1,65 @@
+com.example.bootsup.app-transition-1.4.1-0 C:\Users\Usuario\.gradle\caches\transforms-3\0380147ef4ae4ac9f3fc43117d4163e1\transformed\transition-1.4.1\res
+com.example.bootsup.app-jetified-window-1.2.0-1 C:\Users\Usuario\.gradle\caches\transforms-3\0be72f60c545a23134e9f3c230164d5a\transformed\jetified-window-1.2.0\res
+com.example.bootsup.app-jetified-datastore-preferences-release-2 C:\Users\Usuario\.gradle\caches\transforms-3\0f10765c886d6e03cd98c5c5a45691a4\transformed\jetified-datastore-preferences-release\res
+com.example.bootsup.app-jetified-activity-ktx-1.9.3-3 C:\Users\Usuario\.gradle\caches\transforms-3\1705962ea76891431011fd889e2bf5ec\transformed\jetified-activity-ktx-1.9.3\res
+com.example.bootsup.app-fragment-1.7.1-4 C:\Users\Usuario\.gradle\caches\transforms-3\19df744519e104017ab868eb2c52c1f0\transformed\fragment-1.7.1\res
+com.example.bootsup.app-jetified-lifecycle-process-2.7.0-5 C:\Users\Usuario\.gradle\caches\transforms-3\1a524f4db9ed026462ced34d0da13856\transformed\jetified-lifecycle-process-2.7.0\res
+com.example.bootsup.app-jetified-play-services-auth-21.0.0-6 C:\Users\Usuario\.gradle\caches\transforms-3\1e647b38ad76b19813746dcc014e71a5\transformed\jetified-play-services-auth-21.0.0\res
+com.example.bootsup.app-jetified-lifecycle-viewmodel-savedstate-2.7.0-7 C:\Users\Usuario\.gradle\caches\transforms-3\2fcd6a6a7af370f9d33b129657205f40\transformed\jetified-lifecycle-viewmodel-savedstate-2.7.0\res
+com.example.bootsup.app-jetified-lifecycle-livedata-core-ktx-2.7.0-8 C:\Users\Usuario\.gradle\caches\transforms-3\335a3484c79f34ee050026f4d0030e8d\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
+com.example.bootsup.app-jetified-savedstate-1.2.1-9 C:\Users\Usuario\.gradle\caches\transforms-3\3baf235c5108c5e4b8c679bb17fe2180\transformed\jetified-savedstate-1.2.1\res
+com.example.bootsup.app-jetified-play-services-basement-18.4.0-10 C:\Users\Usuario\.gradle\caches\transforms-3\489ceab5024e99caa6e9394b37baf274\transformed\jetified-play-services-basement-18.4.0\res
+com.example.bootsup.app-jetified-play-services-base-18.1.0-11 C:\Users\Usuario\.gradle\caches\transforms-3\48a2613ded6021647f0b96a6633af6b5\transformed\jetified-play-services-base-18.1.0\res
+com.example.bootsup.app-jetified-core-1.0.0-12 C:\Users\Usuario\.gradle\caches\transforms-3\4b0e96d9fadf3b85fe60c0b04c152a53\transformed\jetified-core-1.0.0\res
+com.example.bootsup.app-browser-1.4.0-13 C:\Users\Usuario\.gradle\caches\transforms-3\5012c7c5ba142a29c87ddeba3e4ca9f7\transformed\browser-1.4.0\res
+com.example.bootsup.app-jetified-activity-1.9.3-14 C:\Users\Usuario\.gradle\caches\transforms-3\52d9afe015acc8b4854314b185d1825e\transformed\jetified-activity-1.9.3\res
+com.example.bootsup.app-jetified-lifecycle-runtime-ktx-2.7.0-15 C:\Users\Usuario\.gradle\caches\transforms-3\546813e22e22a638df31bd4ab7a4de8b\transformed\jetified-lifecycle-runtime-ktx-2.7.0\res
+com.example.bootsup.app-lifecycle-viewmodel-2.7.0-16 C:\Users\Usuario\.gradle\caches\transforms-3\6daf1fd1bf8df616ed2b12e8b8564774\transformed\lifecycle-viewmodel-2.7.0\res
+com.example.bootsup.app-lifecycle-runtime-2.7.0-17 C:\Users\Usuario\.gradle\caches\transforms-3\7073ee27cf0680513a2a7231a3f70737\transformed\lifecycle-runtime-2.7.0\res
+com.example.bootsup.app-jetified-startup-runtime-1.1.1-18 C:\Users\Usuario\.gradle\caches\transforms-3\7adb6b33592547edf1c889fdd0e32eff\transformed\jetified-startup-runtime-1.1.1\res
+com.example.bootsup.app-jetified-fragment-ktx-1.7.1-19 C:\Users\Usuario\.gradle\caches\transforms-3\80d315ac91554cb434979699e11a7705\transformed\jetified-fragment-ktx-1.7.1\res
+com.example.bootsup.app-jetified-savedstate-ktx-1.2.1-20 C:\Users\Usuario\.gradle\caches\transforms-3\8662f75c4926231f61d8e067926eab54\transformed\jetified-savedstate-ktx-1.2.1\res
+com.example.bootsup.app-jetified-profileinstaller-1.3.1-21 C:\Users\Usuario\.gradle\caches\transforms-3\89212e5aa8de6a7c13c0f56587122102\transformed\jetified-profileinstaller-1.3.1\res
+com.example.bootsup.app-jetified-appcompat-resources-1.1.0-22 C:\Users\Usuario\.gradle\caches\transforms-3\8e3e0ed293386feb861fba908dcf5c82\transformed\jetified-appcompat-resources-1.1.0\res
+com.example.bootsup.app-jetified-core-ktx-1.13.1-23 C:\Users\Usuario\.gradle\caches\transforms-3\91d3aa789f801cd3951b8c51290ce634\transformed\jetified-core-ktx-1.13.1\res
+com.example.bootsup.app-appcompat-1.1.0-24 C:\Users\Usuario\.gradle\caches\transforms-3\93e7b8378748ce7abae09e07c00bc1d8\transformed\appcompat-1.1.0\res
+com.example.bootsup.app-jetified-datastore-release-25 C:\Users\Usuario\.gradle\caches\transforms-3\9451f9d59569bd97288613812138a8a8\transformed\jetified-datastore-release\res
+com.example.bootsup.app-jetified-annotation-experimental-1.4.0-26 C:\Users\Usuario\.gradle\caches\transforms-3\9b0acc0e22f4736025d514724c73c258\transformed\jetified-annotation-experimental-1.4.0\res
+com.example.bootsup.app-jetified-core-common-2.0.3-27 C:\Users\Usuario\.gradle\caches\transforms-3\9dcb9422585fbcf2d97dbcd718a15e10\transformed\jetified-core-common-2.0.3\res
+com.example.bootsup.app-core-runtime-2.2.0-28 C:\Users\Usuario\.gradle\caches\transforms-3\9fd9d76bdbe806896d31da0db82fb9f5\transformed\core-runtime-2.2.0\res
+com.example.bootsup.app-jetified-credentials-play-services-auth-1.2.0-rc01-29 C:\Users\Usuario\.gradle\caches\transforms-3\a289c4b0605bba84ae53796d8824a2eb\transformed\jetified-credentials-play-services-auth-1.2.0-rc01\res
+com.example.bootsup.app-jetified-window-java-1.2.0-30 C:\Users\Usuario\.gradle\caches\transforms-3\a5b7d3160c7ee938407fad9c2e894ec8\transformed\jetified-window-java-1.2.0\res
+com.example.bootsup.app-jetified-firebase-common-21.0.0-31 C:\Users\Usuario\.gradle\caches\transforms-3\b0e605d6ed1ac2dfc53bf65707ab5016\transformed\jetified-firebase-common-21.0.0\res
+com.example.bootsup.app-jetified-datastore-core-release-32 C:\Users\Usuario\.gradle\caches\transforms-3\b6756471101600ea72188620d43dab28\transformed\jetified-datastore-core-release\res
+com.example.bootsup.app-recyclerview-1.0.0-33 C:\Users\Usuario\.gradle\caches\transforms-3\c25d28b52265e6b3d44a9bf9c6496827\transformed\recyclerview-1.0.0\res
+com.example.bootsup.app-slidingpanelayout-1.2.0-34 C:\Users\Usuario\.gradle\caches\transforms-3\cd4e0dac613152c64f6e607bc87a1562\transformed\slidingpanelayout-1.2.0\res
+com.example.bootsup.app-core-1.13.1-35 C:\Users\Usuario\.gradle\caches\transforms-3\d474d3d1fb8236bbf803da90aca402cd\transformed\core-1.13.1\res
+com.example.bootsup.app-coordinatorlayout-1.0.0-36 C:\Users\Usuario\.gradle\caches\transforms-3\eabf6bac3e38084cb41a388eb34041a1\transformed\coordinatorlayout-1.0.0\res
+com.example.bootsup.app-lifecycle-livedata-core-2.7.0-37 C:\Users\Usuario\.gradle\caches\transforms-3\ec1958f6a6aa8f77b064a925267402c7\transformed\lifecycle-livedata-core-2.7.0\res
+com.example.bootsup.app-jetified-lifecycle-viewmodel-ktx-2.7.0-38 C:\Users\Usuario\.gradle\caches\transforms-3\f1fd21ad5636299119e4f332a47c35d2\transformed\jetified-lifecycle-viewmodel-ktx-2.7.0\res
+com.example.bootsup.app-jetified-credentials-1.2.0-rc01-39 C:\Users\Usuario\.gradle\caches\transforms-3\f40e1391baebf89192458ab9251554b5\transformed\jetified-credentials-1.2.0-rc01\res
+com.example.bootsup.app-jetified-tracing-1.2.0-40 C:\Users\Usuario\.gradle\caches\transforms-3\fbf7ec5df4541674fc5397d74844870e\transformed\jetified-tracing-1.2.0\res
+com.example.bootsup.app-preference-1.2.1-41 C:\Users\Usuario\.gradle\caches\transforms-3\fc632b8294bcecefef6b4f8517114b07\transformed\preference-1.2.1\res
+com.example.bootsup.app-packaged_res-42 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\cloud_firestore-5.6.6\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-43 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\connectivity_plus-4.0.2\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-44 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\device_info_plus-11.3.0\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-45 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\emoji_picker_flutter-3.1.0\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-46 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_auth-5.5.2\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-47 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_core-3.13.0\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-48 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\firebase_storage-12.4.5\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-49 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_native_splash-2.4.4\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-50 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\flutter_plugin_android_lifecycle-2.0.26\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-51 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\google_sign_in_android-6.1.35\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-52 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\image_picker_android-0.8.12+21\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-53 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\path_provider_android-2.2.15\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-54 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\shared_preferences_android-2.4.7\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-55 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\sqflite_android-2.4.0\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-packaged_res-56 C:\Users\Usuario\AppData\Local\Pub\Cache\hosted\pub.dev\vibration-2.1.0\android\build\intermediates\packaged_res\debug
+com.example.bootsup.app-google-services-57 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\build\generated\res\google-services\debug
+com.example.bootsup.app-pngs-58 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\build\generated\res\pngs\debug
+com.example.bootsup.app-resValues-59 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\build\generated\res\resValues\debug
+com.example.bootsup.app-packageDebugResources-60 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.bootsup.app-packageDebugResources-61 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.bootsup.app-merged_res-62 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\build\intermediates\merged_res\debug
+com.example.bootsup.app-debug-63 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\src\debug\res
+com.example.bootsup.app-main-64 C:\Users\Usuario\Downloads\BRAULIO DOCUMENTOS\AppBootsUp\bootsup\android\app\src\main\res

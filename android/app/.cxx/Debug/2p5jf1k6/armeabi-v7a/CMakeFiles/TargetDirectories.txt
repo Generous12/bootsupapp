@@ -1,0 +1,2 @@
+C:/Users/Usuario/Downloads/BRAULIO DOCUMENTOS/AppBootsUp/bootsup/android/app/.cxx/Debug/2p5jf1k6/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Usuario/Downloads/BRAULIO DOCUMENTOS/AppBootsUp/bootsup/android/app/.cxx/Debug/2p5jf1k6/armeabi-v7a/CMakeFiles/rebuild_cache.dir

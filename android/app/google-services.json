@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "31698346779",
+    "project_id": "bootsup-3d44d",
+    "storage_bucket": "bootsup-3d44d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31698346779:android:c0c382355d52db9df269be",
+        "android_client_info": {
+          "package_name": "com.example.bootsup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9o53w6zKq8PhNE-rRf8ZhxRvjRc8v5KE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

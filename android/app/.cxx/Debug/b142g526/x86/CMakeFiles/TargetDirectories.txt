@@ -1,0 +1,2 @@
+C:/Users/Usuario/Downloads/BRAULIO DOCUMENTOS/AppBootsUp/bootsup/android/app/.cxx/Debug/b142g526/x86/CMakeFiles/edit_cache.dir
+C:/Users/Usuario/Downloads/BRAULIO DOCUMENTOS/AppBootsUp/bootsup/android/app/.cxx/Debug/b142g526/x86/CMakeFiles/rebuild_cache.dir
