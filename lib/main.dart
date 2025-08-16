@@ -149,7 +149,7 @@ class _MyAppState extends State<MyApp> {
           foregroundColor: Colors.black,
           elevation: 0,
         ),
-        bottomAppBarTheme: const BottomAppBarTheme(
+        bottomAppBarTheme: BottomAppBarThemeData(
           color: Color(0xFFFAFAFA),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
@@ -173,7 +173,7 @@ class _MyAppState extends State<MyApp> {
           foregroundColor: Colors.white,
           elevation: 0,
         ),
-        bottomAppBarTheme: const BottomAppBarTheme(
+        bottomAppBarTheme: BottomAppBarThemeData(
           color: Color(0xFF121212),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
