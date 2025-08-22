@@ -4,7 +4,6 @@ import 'package:bootsup/Vistas/menuOpcionesPerfil/confAvanzada.dart';
 import 'package:bootsup/Vistas/menuOpcionesPerfil/correoUsu.dart';
 import 'package:bootsup/Vistas/menuOpcionesPerfil/direccion.dart';
 import 'package:bootsup/Vistas/menuOpcionesPerfil/dni.dart';
-import 'package:bootsup/Vistas/menuOpcionesPerfil/personlizacionTema.dart';
 import 'package:bootsup/Vistas/menuOpcionesPerfil/telefono.dart';
 import 'package:bootsup/widgets/AnimacionCambioScreen.dart';
 import 'package:bootsup/widgets/menuBotones/fullWidthButton.dart';
@@ -121,19 +120,7 @@ class MenuScreen extends StatelessWidget {
                   },
                 ),
               ),
-              buildSectionHeader(context, "Temas"),
-              FullWidthMenuTile(
-                option: MenuOption(
-                  title: 'Personalización de la cuenta',
-                  description: 'Cambia el tema y colores de la app.',
-                  icon: Iconsax.setting_2,
-                  onTap: () {
-                    navegarConSlideDerecha(
-                        context, const PersonalizacionCuentaScreen());
-                  },
-                ),
-              ),
-              buildSectionHeader(context, "Eliminr mi cuenta"),
+              buildSectionHeader(context, "Eliminar mi cuenta"),
               FullWidthMenuTile(
                 option: MenuOption(
                   title: 'Configuración avanzada',

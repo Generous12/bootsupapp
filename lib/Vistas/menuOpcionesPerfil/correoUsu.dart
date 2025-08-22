@@ -32,9 +32,8 @@ class _CorreoScreenState extends State<CorreoScreen> {
             await _firestore.collection('users').doc(user.uid).get();
 
         setState(() {
-          emailUsuario = userData['email'] ?? ''; // Cargar el correo actual
-          _emailController.text =
-              ''; // Dejar vacío para que ingrese un nuevo correo
+          emailUsuario = userData['email'] ?? '';
+          _emailController.text = '';
         });
       }
     } catch (e) {
@@ -46,8 +45,7 @@ class _CorreoScreenState extends State<CorreoScreen> {
     for (int i = 0; i < 60; i++) {
       await Future.delayed(const Duration(seconds: 1));
       await user.reload();
-      user =
-          _auth.currentUser!; // Asegurarse de recargar el usuario correctamente
+      user = _auth.currentUser!;
       if (user.emailVerified) {
         return true;
       }
@@ -107,9 +105,7 @@ class _CorreoScreenState extends State<CorreoScreen> {
         SnackBar(content: Text('Error al actualizar el correo: $e')),
       );
     } finally {
-      setState(() {
-// Finalizar la carga
-      });
+      setState(() {});
     }
   }
 

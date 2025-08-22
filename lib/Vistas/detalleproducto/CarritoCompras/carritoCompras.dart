@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:bootsup/Vistas/detalleproducto/CarritoCompras/MetodoPago/SeleccionMetodoPago.dart';
 import 'package:bootsup/Vistas/detalleproducto/CarritoCompras/carritoService.dart';
 import 'package:bootsup/Vistas/menuOpcionesPerfil/direccion.dart';
@@ -50,47 +52,52 @@ class _CarritoPageState extends State<CarritoPage> {
     }
   }
 
+//CORRECTO, CALCULA BIEN EL PRECIO FINAL
   Future<void> finalizarCompra(BuildContext context) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return;
 
-      final carritoService =
-          Provider.of<CarritoService>(context, listen: false);
+      final carritoService = context.read<CarritoService>();
+
       final carrito = carritoService.obtenerCarrito();
+      if (carrito.isEmpty) {
+        await showCustomDialog(
+          context: context,
+          title: 'ERROR',
+          message: 'Su compra no  ha sido procesada',
+          confirmButtonText: 'Cerrar',
+        );
+        setState(() => _isLoading = false);
+        return;
+      }
       final double total = carritoService.calcularTotal();
       final _userId = user.uid;
 
-      final double totalConDescuento = carrito.fold(0.0, (sum, item) {
-        final dynamic precioRaw = item['precio'];
-        final dynamic cantidadRaw = item['cantidad'];
-        final dynamic descuentoRaw = item['descuento'];
+      final double totalDescuento = carrito.fold(0.0, (sum, item) {
+        final double precioConDescuento = (item['precio'] is String)
+            ? double.tryParse(item['precio']) ?? 0.0
+            : (item['precio'] as num?)?.toDouble() ?? 0.0;
 
-        final double precio = (precioRaw is String)
-            ? double.tryParse(precioRaw) ?? 0.0
-            : (precioRaw is num)
-                ? precioRaw.toDouble()
-                : 0.0;
+        final int cantidad = (item['cantidad'] is String)
+            ? int.tryParse(item['cantidad']) ?? 1
+            : (item['cantidad'] as int?) ?? 1;
 
-        final int cantidad = (cantidadRaw is String)
-            ? int.tryParse(cantidadRaw) ?? 1
-            : (cantidadRaw is int)
-                ? cantidadRaw
-                : 1;
+        final double descuento = (item['descuento'] is String)
+            ? double.tryParse(item['descuento']) ?? 0.0
+            : (item['descuento'] as num?)?.toDouble() ?? 0.0;
 
-        final double descuento = (descuentoRaw is String)
-            ? double.tryParse(descuentoRaw) ?? 0.0
-            : (descuentoRaw is num)
-                ? descuentoRaw.toDouble()
-                : 0.0;
+        final double precioOriginal = descuento > 0
+            ? precioConDescuento / (1 - descuento / 100)
+            : precioConDescuento;
 
-        final double precioConDescuento = precio * (1 - descuento / 100);
+        final double valorDescuento =
+            (precioOriginal - precioConDescuento) * cantidad;
 
-        return sum + precioConDescuento * cantidad;
+        return sum + valorDescuento;
       });
 
-      final double totalDescuento = total - totalConDescuento;
-      final double subtotal = totalDescuento > 0 ? totalConDescuento : total;
+      final double subtotal = total;
       final double impuesto = subtotal * 0.04;
       final double totalFinal = subtotal + impuesto;
 
@@ -155,15 +162,14 @@ class _CarritoPageState extends State<CarritoPage> {
             : (precioRaw is num)
                 ? precioRaw.toDouble()
                 : 0.0;
-
+        //posible uso
         final double descuento = (descuentoRaw is String)
             ? double.tryParse(descuentoRaw) ?? 0.0
             : (descuentoRaw is num)
                 ? descuentoRaw.toDouble()
                 : 0.0;
 
-        final double precioConDescuento = precio * (1 - descuento / 100);
-
+        final double precioConDescuento = precio;
         final Map<String, dynamic> data = {
           'nombreProducto': producto['nombreProducto'],
           'precio': precioConDescuento,
@@ -209,8 +215,6 @@ class _CarritoPageState extends State<CarritoPage> {
       setState(() {
         carritoService.limpiarCarrito();
       });
-
-      Navigator.pop(context);
     } catch (e) {
       print('Error al finalizar compra: $e');
       ScaffoldMessenger.of(context)

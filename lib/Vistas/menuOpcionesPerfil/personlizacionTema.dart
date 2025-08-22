@@ -27,7 +27,7 @@ class PersonalizacionCuentaScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personalización'),
-        elevation: 0.5,
+        elevation: 0.0,
         toolbarHeight: 48,
         centerTitle: true,
         backgroundColor: theme.scaffoldBackgroundColor,

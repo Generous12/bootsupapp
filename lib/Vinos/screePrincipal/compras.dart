@@ -1,22 +1,25 @@
+import 'package:bootsup/ModulosVinos/crritoServiceV.dart';
+import 'package:bootsup/Vinos/detalleVinos/badgesVinos.dart';
+import 'package:bootsup/Vinos/detalleVinos/detalleProductoV.dart';
 import 'package:bootsup/Vista/EmpresaVista/VisitasPerfilYPublicaciones/todosProducos/filtro.dart';
-import 'package:bootsup/Vistas/detalleproducto/detalleProducto.dart';
+import 'package:bootsup/WidgetsVinos/selector.dart';
 import 'package:bootsup/widgets/AnimacionCambioScreen.dart';
-import 'package:bootsup/widgets/BotonesSeleccionables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:redacted/redacted.dart';
 
-class ComprasPage extends StatefulWidget {
-  const ComprasPage({super.key});
+class ComprasPageVinos extends StatefulWidget {
+  const ComprasPageVinos({super.key});
 
   @override
   _ComprasPageState createState() => _ComprasPageState();
 }
 
-class _ComprasPageState extends State<ComprasPage> {
+class _ComprasPageState extends State<ComprasPageVinos> {
   String? selectedCategoria;
   List<DocumentSnapshot> _allProductos = [];
   TextEditingController _searchController = TextEditingController();
@@ -31,7 +34,7 @@ class _ComprasPageState extends State<ComprasPage> {
   final ScrollController _scrollController = ScrollController();
   String? _categoriaSeleccionada;
 
-  void _cargarProductos({String? criterio, String? categoria}) async {
+  void _filtraravanzado({String? criterio, String? categoria}) async {
     setState(() {
       _isRedacted = true;
       _paginaActual = 1;
@@ -39,14 +42,12 @@ class _ComprasPageState extends State<ComprasPage> {
       _productosAleatorios.clear();
     });
 
-    Query query = FirebaseFirestore.instance.collection('productos');
+    Query query = FirebaseFirestore.instance.collection('VinosPiscosProductos');
 
-    // 🔽 Aplicar filtro de categoría si no es 'General'
     if (categoria != null && categoria != 'General') {
       query = query.where('categoria', isEqualTo: categoria);
     }
 
-    // 🔽 Aplicar orden según el criterio
     if (criterio == 'recientes') {
       query = query.orderBy('fecha', descending: true);
     } else if (criterio == 'precioMenor') {
@@ -106,7 +107,6 @@ class _ComprasPageState extends State<ComprasPage> {
       _productos = snapshot.docs;
     }
 
-    // Aleatorizar si no hay criterio
     if (criterio == null || criterio == 'aleatorio') {
       _productos.shuffle();
     }
@@ -121,9 +121,10 @@ class _ComprasPageState extends State<ComprasPage> {
     try {
       final productosQuery = categoria != null && categoria.isNotEmpty
           ? FirebaseFirestore.instance
-              .collection('productos')
+              .collection('VinosPiscosProductos') //cambiar por productos
               .where('categoria', isEqualTo: categoria)
-          : FirebaseFirestore.instance.collection('productos');
+          : FirebaseFirestore.instance
+              .collection('VinosPiscosProductos'); //cambiar por productos
 
       final productosSnapshot = await productosQuery.get();
 
@@ -254,7 +255,7 @@ class _ComprasPageState extends State<ComprasPage> {
         },
         behavior: HitTestBehavior.translucent,
         child: RefreshIndicator(
-            color: const Color(0xFFFFAF00),
+            color: const Color(0xFFA30000),
             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             onRefresh: () async {
               await cargarContenido();
@@ -325,7 +326,7 @@ class _ComprasPageState extends State<ComprasPage> {
                             builder: (context) => FiltrosAdicionalesSheet(
                               onFiltroSeleccionado: (criterio) {
                                 Navigator.pop(context);
-                                _cargarProductos(
+                                _filtraravanzado(
                                   criterio: criterio,
                                   categoria: _categoriaSeleccionada,
                                 );
@@ -335,14 +336,14 @@ class _ComprasPageState extends State<ComprasPage> {
                           );
                         },
                       ),
-                      /*Consumer<CarritoService>(
+                      Consumer<CarritoServiceVinos>(
                         builder: (context, carritoService, _) {
                           if (carritoService.obtenerCarrito().isEmpty) {
                             return const SizedBox.shrink();
                           }
                           return Padding(
                             padding: const EdgeInsets.only(left: 4),
-                            child: IconoCarritoConBadge(
+                            child: IconoCarritoConBadgeVinos(
                               usarEstiloBoton: true,
                               altura: 48,
                               iconSize: 22,
@@ -354,7 +355,7 @@ class _ComprasPageState extends State<ComprasPage> {
                             ),
                           );
                         },
-                      ),*/
+                      ),
                     ],
                   ),
                 ),
@@ -362,17 +363,15 @@ class _ComprasPageState extends State<ComprasPage> {
                   preferredSize: const Size.fromHeight(40),
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: CategoriaSelector(
-                      onCategoriaSelected: (value) {
-                        setState(() {
-                          _productosAleatorios.clear();
-                          _todosCargados = false;
-                          _isCargandoMas = false;
-                          _categoriaSeleccionada = value;
-                          FocusScope.of(context).unfocus();
-                        });
-                        _fetchAndRedactProductos(
-                            categoria: _categoriaSeleccionada);
+                    child: CategoriaSelectorVinos(
+                      //elimnar Vinos
+                      onCategoriaSelected: (categoria) {
+                        selectedCategoria = categoria;
+                        _productosAleatorios.clear();
+                        FocusScope.of(context).unfocus();
+                        _todosCargados = false;
+                        _isCargandoMas = false;
+                        _fetchAndRedactProductos(categoria: selectedCategoria);
                       },
                     ),
                   ),
@@ -384,7 +383,7 @@ class _ComprasPageState extends State<ComprasPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: LoadingAnimationWidget.staggeredDotsWave(
-                        color: const Color(0xFFFFAF00),
+                        color: const Color(0xFFA30000),
                         size: 40,
                       ),
                     ),
@@ -454,7 +453,7 @@ class _ComprasPageState extends State<ComprasPage> {
                             FocusScope.of(context).unfocus();
                             navegarConSlideIzquierda(
                               context,
-                              DetalleProductoPage(
+                              DetalleProductoPageVinos(
                                 producto: producto,
                               ),
                             );
@@ -660,7 +659,7 @@ class _ComprasPageState extends State<ComprasPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: LoadingAnimationWidget.staggeredDotsWave(
-                        color: const Color(0xFFFFAF00),
+                        color: const Color(0xFFA30000),
                         size: 40,
                       ),
                     ),

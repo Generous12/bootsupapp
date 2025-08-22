@@ -328,8 +328,7 @@ class _ChatClientesScreenState extends State<ChatClientesScreen> {
                             );
                             if (mounted) {
                               setState(() {
-                                _streamChats = obtenerChatsDeEmpresa(
-                                    empresaId); // <--- importante
+                                _streamChats = obtenerChatsDeEmpresa(empresaId);
                               });
                             }
                           },

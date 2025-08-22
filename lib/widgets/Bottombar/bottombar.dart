@@ -44,8 +44,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           setState(() {
             firestoreProfileImageUrl = url;
             isImageLoaded = true;
-
-            // Cachearlo
             ImageCacheHelper.profileImageUrl = url;
             ImageCacheHelper.isImageLoaded = true;
           });
@@ -72,7 +70,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         }
       }
     } catch (e, stackTrace) {
-      // Usa logging en lugar de print en apps reales
       print("Error obteniendo la URL de la imagen de Firestore: $e");
       print("StackTrace: $stackTrace");
     }
@@ -87,7 +84,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     bool isProfileSelected = widget.currentIndex == 3;
 
     return SizedBox(
-      height: 56,
+      height: 55,
       child: BottomNavigationBar(
         currentIndex: widget.currentIndex,
         onTap: widget.onTap,

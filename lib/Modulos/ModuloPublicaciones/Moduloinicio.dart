@@ -15,6 +15,19 @@ class FirestoreService {
     }
   }
 
+//cambiar por productos, ahora es de VINOS
+  static Future<List<DocumentSnapshot>> fetchProductosVinos() async {
+    try {
+      Query productosQuery =
+          FirebaseFirestore.instance.collection('VinosPiscosProductos');
+      QuerySnapshot productosSnapshot = await productosQuery.get();
+      return productosSnapshot.docs;
+    } catch (e) {
+      print("Error al cargar los productos: $e");
+      return [];
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> fetchPublicacionesConEmpresa({
     required List<String> idsMostrados,
     int limit = 6,

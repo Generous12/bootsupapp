@@ -297,7 +297,7 @@ class SeguimientoEnvio extends StatelessWidget {
   Widget build(BuildContext context) {
     final index = _estadoToIndex(estado);
     return SizedBox(
-      height: 100,
+      height: 90,
       child: Row(
         children: List.generate(estados.length * 2 - 1, (i) {
           final isTile = i.isEven;
@@ -313,12 +313,14 @@ class SeguimientoEnvio extends StatelessWidget {
                 isFirst: idx == 0,
                 isLast: idx == estados.length - 1,
                 beforeLineStyle: LineStyle(
-                  color: isActive ? Colors.orange : Colors.grey.shade300,
+                  color: isActive
+                      ? const ui.Color(0xFFA30000) //aqui era orange
+                      : Colors.grey.shade300,
                   thickness: 4,
                 ),
                 afterLineStyle: LineStyle(
                   color: idx < index
-                      ? const Color(0xFFFF9800)
+                      ? const Color(0xFFA30000) //aqui era orange
                       : Colors.grey.shade300,
                   thickness: 4,
                 ),
@@ -326,7 +328,9 @@ class SeguimientoEnvio extends StatelessWidget {
                   width: 30,
                   height: 30,
                   indicatorXY: 0.5,
-                  color: isActive ? Colors.orange : Colors.grey.shade300,
+                  color: isActive
+                      ? const ui.Color(0xFFA30000) //aqui era orange
+                      : Colors.grey.shade300,
                   iconStyle: IconStyle(
                     iconData: iconos[idx],
                     color: Colors.white,

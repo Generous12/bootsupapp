@@ -1,7 +1,7 @@
+import 'package:bootsup/ModulosVinos/crritoServiceV.dart';
+import 'package:bootsup/Vinos/screePrincipal/mainScreens.dart';
 import 'package:bootsup/Vista/autenticacion/SplashScreen.dart';
 import 'package:bootsup/Vista/autenticacion/SinConexion.dart';
-import 'package:bootsup/Vistas/detalleproducto/CarritoCompras/carritoService.dart';
-import 'package:bootsup/Vistas/screensPrincipales/MainScreen.dart';
 import 'package:bootsup/widgets/Providers/themeProvider.dart';
 import 'package:bootsup/widgets/Providers/usurioProvider.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
-import 'Vistas/screensPrincipales/inicio.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -26,7 +25,8 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CarritoService()),
+        ChangeNotifierProvider(
+            create: (_) => CarritoServiceVinos()), //Quitr vinos
         ChangeNotifierProvider(create: (_) => UsuarioProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _updateConnectionStatus(ConnectivityResult result) {
-    final carrito = Provider.of<CarritoService>(context, listen: false);
+    final carrito = Provider.of<CarritoServiceVinos>(context, listen: false);
 
     final bool isNowConnected = result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi;
@@ -95,7 +95,9 @@ class _MyAppState extends State<MyApp> {
         } else {
           _navigatorKey.currentState?.pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (_) => _isLoggedIn ? Inicio() : const SplashScreen(),
+              builder: (_) => _isLoggedIn
+                  ? MainScreenVinos(user: FirebaseAuth.instance.currentUser)
+                  : const SplashScreen(),
             ),
             (route) => false,
           );
@@ -106,7 +108,7 @@ class _MyAppState extends State<MyApp> {
 
   void _listenToAuthChanges() {
     FirebaseAuth.instance.authStateChanges().listen((user) {
-      final carrito = Provider.of<CarritoService>(context, listen: false);
+      final carrito = Provider.of<CarritoServiceVinos>(context, listen: false);
       final usuarioProvider =
           Provider.of<UsuarioProvider>(context, listen: false);
       if (user == null) {
@@ -138,7 +140,8 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Afacad',
         brightness: Brightness.light,
         colorScheme: const ColorScheme.light(
-          primary: Color(0xFFFFAF00),
+          // primary: Color(0xFFFFAF00),
+          primary: Color(0xFFA30000),
           onPrimary: Color(0xFFFAFAFA),
           background: Color(0xFFFAFAFA),
           onBackground: Colors.black,
@@ -162,7 +165,8 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Afacad',
         brightness: Brightness.dark,
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFFFFAF00),
+          // primary: Color(0xFFFFAF00),
+          primary: Color(0xFFA30000),
           onPrimary: Colors.black,
           background: Color(0xFF121212),
           onBackground: Colors.white,
@@ -184,7 +188,8 @@ class _MyAppState extends State<MyApp> {
       home: !_verificacionCompleta
           ? const SplashScreen()
           : _isLoggedIn
-              ? MainScreen(user: FirebaseAuth.instance.currentUser)
+              ? MainScreenVinos(
+                  user: FirebaseAuth.instance.currentUser) //Quitar Vinos
               : const SplashScreen(),
     );
   }

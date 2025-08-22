@@ -1,15 +1,12 @@
 import 'package:animations/animations.dart';
 import 'package:bootsup/Modulos/ModuloAuth/AuthService.dart';
-import 'package:bootsup/Vista/EmpresaVista/GestionEmpresaPubli/menuEmpresa.dart';
-import 'package:bootsup/Vistas/detalleproducto/AyudaAtencionCliente/atencioncliente.dart';
-import 'package:bootsup/Vistas/detalleproducto/AyudaAtencionCliente/ayuda.dart';
-import 'package:bootsup/Vistas/detalleproducto/CarritoCompras/ChatsCliente/clienteChats.dart';
-import 'package:bootsup/Vistas/detalleproducto/ComprasRealizadas/listaCompras.dart';
-import 'package:bootsup/Vistas/menuOpcionesPerfil/membresia.dart';
+import 'package:bootsup/Vinos/screePrincipal/Comprasrealizadas/listaComprasV.dart';
+import 'package:bootsup/Vinos/screePrincipal/atencionCliente/atencionClient.dart';
+import 'package:bootsup/Vinos/screePrincipal/atencionCliente/ayuda.dart';
 import 'package:bootsup/Vistas/menuOpcionesPerfil/menu.dart';
+import 'package:bootsup/Vistas/menuOpcionesPerfil/personlizacionTema.dart';
 import 'package:bootsup/Vistas/screensPrincipales/CargaImagen.dart';
 import 'package:bootsup/widgets/AnimacionCambioScreen.dart';
-import 'package:bootsup/widgets/Providers/usurioProvider.dart';
 import 'package:bootsup/widgets/menuBotones/fullWidthButton.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,16 +14,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:provider/provider.dart';
 
-class PerfilPage extends StatefulWidget {
-  const PerfilPage({super.key});
+class PerfilPageVinos extends StatefulWidget {
+  const PerfilPageVinos({super.key});
 
   @override
   _PerfilState createState() => _PerfilState();
 }
 
-class _PerfilState extends State<PerfilPage> {
+class _PerfilState extends State<PerfilPageVinos> {
   String? _firestoreUsername;
   String? _firestoreProfileImageUrl;
   User? _user = FirebaseAuth.instance.currentUser;
@@ -97,11 +93,25 @@ class _PerfilState extends State<PerfilPage> {
                 ),
                 FullWidthMenuTile(
                   option: MenuOption(
+                    title: 'Personalización de la cuenta',
+                    description: 'Cambia el tema y colores de la app.',
+                    icon: Iconsax.setting_2,
+                    onTap: () {
+                      navegarConSlideDerecha(
+                        context,
+                        const PersonalizacionCuentaScreen(),
+                      );
+                    },
+                  ),
+                ),
+                FullWidthMenuTile(
+                  option: MenuOption(
                     title: 'Compras',
                     description: 'Ver tus compras realizadas.',
                     icon: Iconsax.shopping_cart,
                     onTap: () {
-                      navegarConSlideDerecha(context, HistorialComprasScreen());
+                      navegarConSlideDerecha(
+                          context, HistorialComprasScreenVinos());
                     },
                   ),
                 ),
@@ -111,7 +121,8 @@ class _PerfilState extends State<PerfilPage> {
                     description: 'Contáctanos para resolver tus dudas',
                     icon: Iconsax.support,
                     onTap: () {
-                      navegarConSlideDerecha(context, AtencionClienteScreen());
+                      navegarConSlideDerecha(
+                          context, AtencionClienteScreenVinos());
                     },
                   ),
                 ),
@@ -121,63 +132,10 @@ class _PerfilState extends State<PerfilPage> {
                     description: 'Encuentra respuestas a tus preguntas',
                     icon: Iconsax.info_circle,
                     onTap: () {
-                      navegarConSlideDerecha(context, AyudaScreen());
+                      navegarConSlideDerecha(context, AyudaScreenVinos());
                     },
                   ),
                 ),
-                FullWidthMenuTile(
-                  option: MenuOption(
-                    title: 'Chats',
-                    description: 'Comunicate con tus empresas elegidas',
-                    icon: Iconsax.info_circle,
-                    onTap: () {
-                      navegarConSlideDerecha(
-                          context, EmpresasContactadasScreen());
-                    },
-                  ),
-                ),
-                FullWidthMenuTile(
-                  option: MenuOption(
-                    title: 'Membresía',
-                    description: 'Gestiona tu suscripción',
-                    icon: Iconsax.crown,
-                    onTap: () {
-                      navegarConSlideDerecha(context, MembresiaScreen());
-                    },
-                  ),
-                ),
-                if (_firestoreUsername != null) ...[
-                  Consumer<UsuarioProvider>(
-                    builder: (context, usuarioProvider, _) {
-                      final datos = usuarioProvider.datosUsuario;
-
-                      if (datos == null) return SizedBox();
-
-                      final membresia = datos['membresia'];
-
-                      if (membresia == 'Empresa' ||
-                          membresia == 'Cliente Pro') {
-                        return FullWidthMenuTile(
-                          option: MenuOption(
-                            title: membresia == 'Empresa'
-                                ? 'Empresa'
-                                : 'Cliente Pro',
-                            description: membresia == 'Empresa'
-                                ? 'Edita la información de tu negocio'
-                                : 'Administra tu cuenta de cliente profesional',
-                            icon: Iconsax.buildings,
-                            onTap: () {
-                              navegarConSlideDerecha(
-                                  context, ConfiguracionPerfilEmpresa());
-                            },
-                          ),
-                        );
-                      }
-
-                      return SizedBox();
-                    },
-                  )
-                ],
                 FullWidthMenuTile(
                   option: MenuOption(
                     title: 'Cerrar Sesión',
@@ -199,7 +157,7 @@ class _PerfilState extends State<PerfilPage> {
     final theme = Theme.of(context);
 
     return SizedBox(
-        width: double.infinity,
+        width: double.infinity, // Ocupa todo el ancho posible
         child: Material(
           borderRadius: BorderRadius.circular(0),
           color: theme.scaffoldBackgroundColor,

@@ -1,13 +1,13 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:bootsup/ModulosVinos/crritoServiceV.dart';
+import 'package:bootsup/Vinos/detalleVinos/carrito.dart';
 import 'package:bootsup/Vistas/detalleproducto/CarritoCompras/MetodoPago/Resultados/PagoSemiAutoma/subirMetodoPago.dart';
-import 'package:bootsup/Vistas/detalleproducto/CarritoCompras/carritoCompras.dart';
-import 'package:bootsup/Vistas/detalleproducto/CarritoCompras/carritoService.dart';
 import 'package:bootsup/widgets/AnimacionCambioScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
-class IconoCarritoConBadge extends StatefulWidget {
+class IconoCarritoConBadgeVinos extends StatefulWidget {
   final bool usarEstiloBoton;
   final double altura;
   final double iconSize;
@@ -15,7 +15,7 @@ class IconoCarritoConBadge extends StatefulWidget {
   final Color iconColor;
   final double borderRadius;
 
-  const IconoCarritoConBadge({
+  const IconoCarritoConBadgeVinos({
     super.key,
     this.usarEstiloBoton = false,
     this.altura = 48.0,
@@ -26,13 +26,14 @@ class IconoCarritoConBadge extends StatefulWidget {
   });
 
   @override
-  State<IconoCarritoConBadge> createState() => _IconoCarritoConBadgeState();
+  State<IconoCarritoConBadgeVinos> createState() =>
+      _IconoCarritoConBadgeState();
 }
 
-class _IconoCarritoConBadgeState extends State<IconoCarritoConBadge> {
+class _IconoCarritoConBadgeState extends State<IconoCarritoConBadgeVinos> {
   @override
   Widget build(BuildContext context) {
-    final carrito = Provider.of<CarritoService>(context);
+    final carrito = Provider.of<CarritoServiceVinos>(context);
     int cantidadCarrito = carrito.obtenerCantidadTotal();
 
     Widget icono = IconButton(
@@ -42,7 +43,7 @@ class _IconoCarritoConBadgeState extends State<IconoCarritoConBadge> {
         size: widget.iconSize,
       ),
       onPressed: () {
-        navegarConSlideArriba(context, CarritoPage());
+        navegarConSlideArriba(context, CarritoPageVinos());
       },
     );
 

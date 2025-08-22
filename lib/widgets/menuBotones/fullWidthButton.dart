@@ -78,7 +78,8 @@ class _FullWidthMenuTileState extends State<FullWidthMenuTile> {
                   ),
                   child: Icon(
                     widget.option.icon ?? Icons.tune,
-                    color: const Color(0xFFFFAF00),
+                    // color: const Color(0xFFFFAF00),
+                    color: const Color(0xFFA30000),
                     size: 20,
                   ),
                 ),
@@ -181,11 +182,10 @@ Widget buildSectionHeader(BuildContext context, String title) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title.toUpperCase(),
+          title,
           style: theme.textTheme.titleMedium?.copyWith(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            letterSpacing: 1.2,
             color: theme.textTheme.bodyLarge?.color,
           ),
         ),

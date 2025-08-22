@@ -265,7 +265,7 @@ class _EmpresaProfileScreenState extends State<EmpresaProfileScreen> {
                       size: 30,
                     ),
                     onPressed: _isRedacted
-                        ? null // Bloquear si está redactado
+                        ? null
                         : () {
                             if (!mounted) return;
                             setState(() {

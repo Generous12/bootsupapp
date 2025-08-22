@@ -11,8 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class CompraExitosaScreen extends StatefulWidget {
-  final List<Map<String, dynamic>>
-      carrito; // Carrito pasado desde la pantalla anterior
+  final List<Map<String, dynamic>> carrito;
   final String direccionEntrega;
 
   const CompraExitosaScreen({
