@@ -4,9 +4,16 @@ import mercadopagoPkg from "mercadopago";
 
 const { MercadoPagoConfig, Preference, Payment } = mercadopagoPkg;
 
-// 🔹 Configuración Mercado Pago (producción)
+// 🔹 Credenciales Mercado Pago (producción)
+const MP_CLIENT_ID = process.env.MP_CLIENT_ID;
+const MP_CLIENT_SECRET = process.env.MP_CLIENT_SECRET;
+const MP_REDIRECT_URI =
+  process.env.MP_REDIRECT_URI ||
+  "https://adminvinosapp-production.up.railway.app/oauth/callback";
+
+// 🔹 Token de producción
 const client = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN, // ⚠️ Coloca tu token de producción en las variables de entorno
+  accessToken: process.env.MP_ACCESS_TOKEN, // ⚠️ Token real de producción
 });
 
 const preferenceClient = new Preference(client);
@@ -35,9 +42,11 @@ app.post("/crear-preferencia", async (req, res) => {
 
     const response = await preferenceClient.create({ body: preferenceData });
 
+    console.log("Preferencia creada:", response.init_point);
+
     res.json({
-      init_point: response.init_point,
-      preference_id: response.id, // ⚠️ importante
+      init_point: response.init_point, // ⚠️ Link real de pago
+      preference_id: response.id,
     });
   } catch (error) {
     console.error("Error creando la preferencia:", error);
@@ -55,6 +64,7 @@ app.get("/verificar-pago/:id", async (req, res) => {
     if (!id) return res.status(400).json({ error: "ID de pago requerido" });
 
     const payment = await paymentClient.get({ id });
+
     res.json({
       id: payment.id,
       status: payment.status,
