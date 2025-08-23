@@ -171,7 +171,7 @@ class ElegirMetodoPagoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           MetodoPagoCard(
-            titulo: 'Pagar con Yape',
+            titulo: 'Pagar con Mercado Pago',
             imagen: 'assets/images/yape.png',
             descripcion: 'Pago rápido y sin comisiones.',
             onTap: () => _abrirCheckout(context),
