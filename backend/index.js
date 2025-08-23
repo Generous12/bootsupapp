@@ -26,8 +26,7 @@ const paymentClient = new Payment(client);
 
 const app = express();
 app.use(cors());
-
-// 🔹 WEBHOOK: Usamos `express.raw` SOLO aquí para poder validar HMAC
+  
 app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
   try {
     const signature = req.headers["x-signature"];
@@ -36,25 +35,26 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
     const dataId = url.searchParams.get("data.id");
     const secret = process.env.MP_WEBHOOK_SECRET;
 
-    if (!secret) {
-      console.error("❌ MP_WEBHOOK_SECRET no configurado.");
-      return res.status(500).send("Server misconfigured");
-    }
+    console.log("🔔 Webhook recibido. Headers:", req.headers);
+    console.log("🔔 Query:", url.searchParams.toString());
+    console.log("🔔 Body:", req.body.toString());
 
-    if (!signature || !requestId || !dataId) {
-      console.warn("⚠️ Headers faltantes en webhook");
-      return res.status(401).send("Unauthorized");
+    // ✅ SIEMPRE RESPONDER 200
+    res.sendStatus(200);
+
+    // 🔒 Solo validamos si hay datos suficientes
+    if (!signature || !requestId || !dataId || !secret) {
+      console.warn("⚠️ No se pudo validar firma (headers faltantes).");
+      return;
     }
 
     const ts = signature.split(",").find((s) => s.includes("ts"))?.split("=")[1];
     const v1 = signature.split(",").find((s) => s.includes("v1"))?.split("=")[1];
-
     if (!ts || !v1) {
       console.warn("⚠️ No se encontraron ts o v1 en signature");
-      return res.status(401).send("Unauthorized");
+      return;
     }
 
-    // 🔑 Construir manifest para HMAC
     const manifest = `id:${dataId};request-id:${requestId};ts:${ts};`;
     const computedHmac = crypto
       .createHmac("sha256", secret)
@@ -63,24 +63,20 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
 
     if (computedHmac !== v1) {
       console.warn("⚠️ Firma inválida");
-      return res.status(401).send("Unauthorized");
+      return;
     }
 
-    // ✅ Body sin tocar
+    // ✅ Si hay datos correctos, procesar evento
     const event = JSON.parse(req.body.toString());
-    console.log("📩 Webhook recibido:", event);
-
     if (event.type === "payment") {
       console.log(`✅ Pago confirmado: ${event.data.id}`);
-      // Aquí actualizas tu base de datos
+      // Guardar en tu DB
     }
-
-    res.sendStatus(200);
   } catch (error) {
     console.error("❌ Error procesando webhook:", error);
-    res.status(500).send("Webhook error");
   }
 });
+
 
 // 🔹 AHORA ponemos express.json() para el resto de endpoints
 app.use(express.json());
