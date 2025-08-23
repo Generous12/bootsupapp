@@ -12,8 +12,17 @@ const MP_REDIRECT_URI =
   "https://adminvinosapp-production.up.railway.app/oauth/callback";
 
 // 🔹 Token de producción
+const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN?.trim(); // ⚠️ Eliminamos espacios accidentales
+
+if (!ACCESS_TOKEN) {
+  console.error("❌ ERROR: La variable MP_ACCESS_TOKEN no está definida o es vacía.");
+  process.exit(1); // Sale del servidor si no hay token
+}
+
+console.log("✅ MP_ACCESS_TOKEN cargado correctamente:", ACCESS_TOKEN);
+
 const client = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN, // ⚠️ Token real de producción
+  accessToken: ACCESS_TOKEN,
 });
 
 const preferenceClient = new Preference(client);
@@ -40,6 +49,9 @@ app.post("/crear-preferencia", async (req, res) => {
       auto_return: "approved",
     };
 
+    // 🔹 Forzar log del body antes de crear preferencia
+    console.log("📦 Items enviados a Mercado Pago:", items);
+
     const response = await preferenceClient.create({ body: preferenceData });
 
     console.log("Preferencia creada:", response.init_point);
@@ -49,10 +61,10 @@ app.post("/crear-preferencia", async (req, res) => {
       preference_id: response.id,
     });
   } catch (error) {
-    console.error("Error creando la preferencia:", error);
+    console.error("Error creando la preferencia:", error.response?.data || error);
     res.status(500).json({
       error: "Error creando la preferencia",
-      detalle: error.message || error,
+      detalle: error.response?.data?.message || error.message || error,
     });
   }
 });
