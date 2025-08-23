@@ -122,13 +122,21 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
       return res.status(401).send("Unauthorized");
     }
 
-    // 🔑 Validar firma HMAC-SHA256
+    // 🔍 Parsear header para obtener el hash v1
+    const sigParts = signatureHeader.split(",").reduce((acc, part) => {
+      const [key, value] = part.split("=");
+      acc[key.trim()] = value.trim();
+      return acc;
+    }, {});
+    const receivedHash = sigParts.v1;
+
+    // 🔑 Validar firma
     const body = req.body.toString();
     const hmac = crypto.createHmac("sha256", secret);
     hmac.update(body);
-    const expectedSignature = hmac.digest("hex");
+    const expectedHash = hmac.digest("hex");
 
-    if (signatureHeader !== expectedSignature) {
+    if (receivedHash !== expectedHash) {
       console.warn("⚠️ Firma inválida");
       return res.status(401).send("Unauthorized");
     }
@@ -136,7 +144,6 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
     const event = JSON.parse(body);
     console.log("📩 Evento recibido de Mercado Pago:", event);
 
-    // 🔹 Manejar evento
     if (event.type === "payment") {
       console.log(`✅ Pago recibido: ${event.data.id}`);
       // Aquí actualizas tu base de datos
@@ -148,5 +155,6 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
     res.status(500).send("Webhook error");
   }
 });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
