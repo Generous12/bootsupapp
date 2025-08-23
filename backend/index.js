@@ -43,9 +43,9 @@ app.post("/crear-preferencia", async (req, res) => {
         failure: "https://tusitio.com/failure",
         pending: "https://tusitio.com/pending",
       },
-      auto_return: "approved",
-       payment_methods: {
-    excluded_payment_methods: [
+    auto_return: "approved",
+      payment_methods: {
+      excluded_payment_methods: [
       { id: "yape" } // ❌ Esto oculta Yape
     ],
     installments: 1, // Opcional: número de cuotas
@@ -103,6 +103,39 @@ app.get("/verificar/:id", async (req, res) => {
       error: "No se pudo verificar el ID",
       detalle: err.message,
     });
+  }
+});
+
+// 🔹 Webhook de Mercado Pago (notificaciones de pago)
+app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
+  try {
+    const signature = req.headers["x-signature"];
+    const secret = process.env.MP_WEBHOOK_SECRET;
+
+    if (!secret) {
+      console.error("❌ MP_WEBHOOK_SECRET no configurado.");
+      return res.status(500).send("Server misconfigured");
+    }
+
+    // 🔒 Validación simple de seguridad
+    if (!signature || signature !== secret) {
+      console.warn("⚠️ Webhook no autorizado");
+      return res.status(401).send("Unauthorized");
+    }
+
+    const event = JSON.parse(req.body.toString());
+    console.log("📩 Evento recibido de Mercado Pago:", event);
+
+    // 🔹 Aquí manejas el evento
+    if (event.type === "payment") {
+      console.log(`✅ Pago recibido: ${event.data.id}`);
+      // Podrías actualizar tu DB con el estado del pago
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("❌ Error procesando webhook:", error);
+    res.status(500).send("Webhook error");
   }
 });
 
