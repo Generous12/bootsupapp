@@ -12,19 +12,16 @@ const MP_REDIRECT_URI =
   "https://adminvinosapp-production.up.railway.app/oauth/callback";
 
 // 🔹 Token de producción
-const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN?.trim(); // ⚠️ Eliminamos espacios accidentales
+const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN?.trim();
 
 if (!ACCESS_TOKEN) {
   console.error("❌ ERROR: La variable MP_ACCESS_TOKEN no está definida o es vacía.");
-  process.exit(1); // Sale del servidor si no hay token
+  process.exit(1);
 }
 
 console.log("✅ MP_ACCESS_TOKEN cargado correctamente");
 
-const client = new MercadoPagoConfig({
-  accessToken: ACCESS_TOKEN,
-});
-
+const client = new MercadoPagoConfig({ accessToken: ACCESS_TOKEN });
 const preferenceClient = new Preference(client);
 const paymentClient = new Payment(client);
 
@@ -49,7 +46,6 @@ app.post("/crear-preferencia", async (req, res) => {
       auto_return: "approved",
     };
 
-    // 🔹 Log para depuración
     console.log("📦 Items enviados a Mercado Pago:", items);
 
     const response = await preferenceClient.create({ body: preferenceData });
@@ -57,7 +53,7 @@ app.post("/crear-preferencia", async (req, res) => {
     console.log("Preferencia creada:", response.init_point);
 
     res.json({
-      init_point: response.init_point, // ⚠️ Link real de pago
+      init_point: response.init_point,
       preference_id: response.id,
     });
   } catch (error) {
@@ -69,29 +65,40 @@ app.post("/crear-preferencia", async (req, res) => {
   }
 });
 
-// 🔹 Verificar pago manualmente
-app.get("/verificar-pago/:id", async (req, res) => {
+// 🔹 Verificar pago (preference_id o payment_id)
+app.get("/verificar/:id", async (req, res) => {
+  const { id } = req.params;
+  if (!id) return res.status(400).json({ error: "ID requerido" });
+
   try {
-    const { id } = req.params;
-    if (!id) return res.status(400).json({ error: "ID de pago requerido" });
-
-    const payment = await paymentClient.get({ id });
-
-    res.json({
-      id: payment.id,
-      status: payment.status,
-      status_detail: payment.status_detail,
-    });
+    // Primero intentamos buscar como payment_id
+    try {
+      const payment = await paymentClient.get({ id });
+      return res.json({
+        tipo: "payment",
+        id: payment.id,
+        status: payment.status,
+        status_detail: payment.status_detail,
+      });
+    } catch (errPayment) {
+      // Si no se encuentra, buscamos como preference_id
+      const preference = await preferenceClient.get({ id });
+      return res.json({
+        tipo: "preference",
+        id: preference.id,
+        status: preference.status,
+        init_point: preference.init_point,
+        items: preference.items,
+      });
+    }
   } catch (err) {
-    console.error("Error verificando pago:", err);
+    console.error("Error verificando ID:", err);
     res.status(500).json({
-      error: "No se pudo verificar el pago",
+      error: "No se pudo verificar el ID",
       detalle: err.message,
     });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
-  console.log(`Servidor escuchando en puerto ${PORT}`)
-);
+app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
