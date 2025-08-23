@@ -64,6 +64,42 @@ app.post("/crear-preferencia", async (req, res) => {
     });
   }
 });
+// 🔹 Crear pago con Yape
+app.post("/crear-pago-yape", async (req, res) => {
+  try {
+    const { yapeToken, amount, description, payerEmail, payerPhone } = req.body;
+
+    if (!yapeToken || !amount || !payerEmail || !payerPhone) {
+      return res.status(400).json({ error: "Datos incompletos para Yape" });
+    }
+
+    const paymentData = {
+      token: yapeToken,
+      transaction_amount: amount,
+      description,
+      installments: 1,
+      payment_method_id: "yape",
+      payer: {
+        email: payerEmail,
+        phone: payerPhone,
+      },
+    };
+
+    const response = await paymentClient.create({ body: paymentData });
+
+    console.log("Pago Yape creado:", response.id);
+
+    res.json({
+      id: response.id,
+      status: response.status,
+      status_detail: response.status_detail,
+    });
+  } catch (err) {
+    console.error("Error creando pago Yape:", err);
+    res.status(500).json({ error: "No se pudo crear el pago Yape", detalle: err.message });
+  }
+});
+
 
 // 🔹 Verificar pago (preference_id o payment_id)
 app.get("/verificar/:id", async (req, res) => {
