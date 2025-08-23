@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mercadopagoPkg from "mercadopago";
+import crypto from "crypto";
 
 const { MercadoPagoConfig, Preference, Payment } = mercadopagoPkg;
 
@@ -106,10 +107,9 @@ app.get("/verificar/:id", async (req, res) => {
   }
 });
 
-// 🔹 Webhook de Mercado Pago (notificaciones de pago)
 app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
   try {
-    const signature = req.headers["x-signature"];
+    const signatureHeader = req.headers["x-signature"];
     const secret = process.env.MP_WEBHOOK_SECRET;
 
     if (!secret) {
@@ -117,19 +117,29 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
       return res.status(500).send("Server misconfigured");
     }
 
-    // 🔒 Validación simple de seguridad
-    if (!signature || signature !== secret) {
-      console.warn("⚠️ Webhook no autorizado");
+    if (!signatureHeader) {
+      console.warn("⚠️ Webhook sin firma");
       return res.status(401).send("Unauthorized");
     }
 
-    const event = JSON.parse(req.body.toString());
+    // 🔑 Validar firma HMAC-SHA256
+    const body = req.body.toString();
+    const hmac = crypto.createHmac("sha256", secret);
+    hmac.update(body);
+    const expectedSignature = hmac.digest("hex");
+
+    if (signatureHeader !== expectedSignature) {
+      console.warn("⚠️ Firma inválida");
+      return res.status(401).send("Unauthorized");
+    }
+
+    const event = JSON.parse(body);
     console.log("📩 Evento recibido de Mercado Pago:", event);
 
-    // 🔹 Aquí manejas el evento
+    // 🔹 Manejar evento
     if (event.type === "payment") {
       console.log(`✅ Pago recibido: ${event.data.id}`);
-      // Podrías actualizar tu DB con el estado del pago
+      // Aquí actualizas tu base de datos
     }
 
     res.sendStatus(200);
@@ -138,6 +148,5 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
     res.status(500).send("Webhook error");
   }
 });
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
