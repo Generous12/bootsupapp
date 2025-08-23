@@ -103,6 +103,8 @@ app.post("/crear-preferencia", async (req, res) => {
       payment_methods: {
         installments: 1, // Número de cuotas
       },
+      notification_url:
+        "https://bootsupapp-production.up.railway.app/webhook",
     };
 
     console.log("📦 Items enviados a Mercado Pago:", items);
