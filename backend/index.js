@@ -44,6 +44,12 @@ app.post("/crear-preferencia", async (req, res) => {
         pending: "https://tusitio.com/pending",
       },
       auto_return: "approved",
+       payment_methods: {
+    excluded_payment_methods: [
+      { id: "yape" } // ❌ Esto oculta Yape
+    ],
+    installments: 1, // Opcional: número de cuotas
+  },
     };
 
     console.log("📦 Items enviados a Mercado Pago:", items);
