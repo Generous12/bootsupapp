@@ -5,22 +5,20 @@ import crypto from "crypto";
 
 const { MercadoPagoConfig, Preference, Payment } = mercadopagoPkg;
 
-// 🔹 Credenciales Mercado Pago (producción) desde variables de entorno
-const MP_CLIENT_ID = process.env.MP_CLIENT_ID;
-const MP_CLIENT_SECRET = process.env.MP_CLIENT_SECRET;
-const MP_REDIRECT_URI =
-  process.env.MP_REDIRECT_URI ||
-  "https://adminvinosapp-production.up.railway.app/oauth/callback";
-
-// 🔹 Token de producción
+// 🔹 Credenciales de Mercado Pago desde variables de entorno
 const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN?.trim();
+const MP_WEBHOOK_SECRET = process.env.MP_WEBHOOK_SECRET?.trim();
 
 if (!ACCESS_TOKEN) {
-  console.error("❌ ERROR: La variable MP_ACCESS_TOKEN no está definida o es vacía.");
+  console.error("❌ ERROR: MP_ACCESS_TOKEN no definido.");
+  process.exit(1);
+}
+if (!MP_WEBHOOK_SECRET) {
+  console.error("❌ ERROR: MP_WEBHOOK_SECRET no definido.");
   process.exit(1);
 }
 
-console.log("✅ MP_ACCESS_TOKEN cargado correctamente");
+console.log("✅ Variables de entorno cargadas correctamente.");
 
 const client = new MercadoPagoConfig({ accessToken: ACCESS_TOKEN });
 const preferenceClient = new Preference(client);
@@ -34,8 +32,9 @@ app.use(express.json());
 app.post("/crear-preferencia", async (req, res) => {
   try {
     const { items } = req.body;
-    if (!items || !Array.isArray(items) || items.length === 0)
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: "Items inválidos o vacíos" });
+    }
 
     const preferenceData = {
       items,
@@ -44,109 +43,92 @@ app.post("/crear-preferencia", async (req, res) => {
         failure: "https://tusitio.com/failure",
         pending: "https://tusitio.com/pending",
       },
-    auto_return: "approved",
+      auto_return: "approved",
       payment_methods: {
-      excluded_payment_methods: [
-      { id: "yape" } // ❌ Esto oculta Yape
-    ],
-    installments: 1, // Opcional: número de cuotas
-  },
+        installments: 1, // una sola cuota
+      },
+      notification_url:
+        "https://adminvinosapp-production.up.railway.app/webhook?source_news=webhooks",
     };
 
-    console.log("📦 Items enviados a Mercado Pago:", items);
+    console.log("📦 Creando preferencia con:", preferenceData);
 
     const response = await preferenceClient.create({ body: preferenceData });
-
-    console.log("Preferencia creada:", response.init_point);
 
     res.json({
       init_point: response.init_point,
       preference_id: response.id,
     });
   } catch (error) {
-    console.error("Error creando la preferencia:", error.response?.data || error);
+    console.error("❌ Error creando preferencia:", error.response?.data || error);
     res.status(500).json({
       error: "Error creando la preferencia",
-      detalle: error.response?.data?.message || error.message || error,
+      detalle: error.response?.data?.message || error.message,
     });
   }
 });
 
-// 🔹 Verificar pago (preference_id o payment_id)
+// 🔹 Endpoint para verificar pago
 app.get("/verificar/:id", async (req, res) => {
   const { id } = req.params;
   if (!id) return res.status(400).json({ error: "ID requerido" });
 
   try {
-    // Primero intentamos buscar como payment_id
-    try {
-      const payment = await paymentClient.get({ id });
-      return res.json({
-        tipo: "payment",
-        id: payment.id,
-        status: payment.status,
-        status_detail: payment.status_detail,
-      });
-    } catch (errPayment) {
-      // Si no se encuentra, buscamos como preference_id
-      const preference = await preferenceClient.get({ id });
-      return res.json({
-        tipo: "preference",
-        id: preference.id,
-        status: preference.status,
-        init_point: preference.init_point,
-        items: preference.items,
-      });
-    }
+    const payment = await paymentClient.get({ id });
+    return res.json({
+      tipo: "payment",
+      id: payment.id,
+      status: payment.status,
+      status_detail: payment.status_detail,
+    });
   } catch (err) {
-    console.error("Error verificando ID:", err);
+    console.error("❌ Error verificando pago:", err);
     res.status(500).json({
-      error: "No se pudo verificar el ID",
+      error: "No se pudo verificar el pago",
       detalle: err.message,
     });
   }
 });
 
+// 🔹 Webhook Mercado Pago con validación HMAC oficial
 app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
   try {
-    const signatureHeader = req.headers["x-signature"];
-    const secret = process.env.MP_WEBHOOK_SECRET;
+    const signature = req.headers["x-signature"];
+    const requestId = req.headers["x-request-id"];
+    const url = new URL(req.protocol + "://" + req.get("host") + req.originalUrl);
+    const dataId = url.searchParams.get("data.id");
+    const ts = signature
+      ?.split(",")
+      .find((s) => s.includes("ts"))
+      ?.split("=")[1];
+    const v1 = signature
+      ?.split(",")
+      .find((s) => s.includes("v1"))
+      ?.split("=")[1];
 
-    if (!secret) {
-      console.error("❌ MP_WEBHOOK_SECRET no configurado.");
-      return res.status(500).send("Server misconfigured");
-    }
-
-    if (!signatureHeader) {
-      console.warn("⚠️ Webhook sin firma");
+    if (!signature || !ts || !v1 || !dataId || !requestId) {
+      console.warn("⚠️ Webhook sin headers completos.");
       return res.status(401).send("Unauthorized");
     }
 
-    // 🔍 Parsear header para obtener el hash v1
-    const sigParts = signatureHeader.split(",").reduce((acc, part) => {
-      const [key, value] = part.split("=");
-      acc[key.trim()] = value.trim();
-      return acc;
-    }, {});
-    const receivedHash = sigParts.v1;
+    // 🔑 Construir cadena para el HMAC
+    const manifest = `id:${dataId};request-id:${requestId};ts:${ts};`;
+    const computedHmac = crypto
+      .createHmac("sha256", MP_WEBHOOK_SECRET)
+      .update(manifest)
+      .digest("hex");
 
-    // 🔑 Validar firma
-    const body = req.body.toString();
-    const hmac = crypto.createHmac("sha256", secret);
-    hmac.update(body);
-    const expectedHash = hmac.digest("hex");
-
-    if (receivedHash !== expectedHash) {
+    if (computedHmac !== v1) {
       console.warn("⚠️ Firma inválida");
       return res.status(401).send("Unauthorized");
     }
 
-    const event = JSON.parse(body);
-    console.log("📩 Evento recibido de Mercado Pago:", event);
+    const event = JSON.parse(req.body.toString());
+    console.log("📩 Webhook recibido:", event);
 
     if (event.type === "payment") {
-      console.log(`✅ Pago recibido: ${event.data.id}`);
-      // Aquí actualizas tu base de datos
+      console.log(`✅ Pago confirmado: ${event.data.id}`);
+      // 🔹 Aquí actualizas tu base de datos
     }
 
     res.sendStatus(200);
@@ -157,4 +139,4 @@ app.post("/webhook", express.raw({ type: "*/*" }), (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Servidor escuchando en puerto ${PORT}`));
