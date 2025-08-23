@@ -4,7 +4,7 @@ import mercadopagoPkg from "mercadopago";
 
 const { MercadoPagoConfig, Preference, Payment } = mercadopagoPkg;
 
-// 🔹 Credenciales Mercado Pago (producción)
+// 🔹 Credenciales Mercado Pago (producción) desde variables de entorno
 const MP_CLIENT_ID = process.env.MP_CLIENT_ID;
 const MP_CLIENT_SECRET = process.env.MP_CLIENT_SECRET;
 const MP_REDIRECT_URI =
@@ -19,7 +19,7 @@ if (!ACCESS_TOKEN) {
   process.exit(1); // Sale del servidor si no hay token
 }
 
-console.log("✅ MP_ACCESS_TOKEN cargado correctamente:", ACCESS_TOKEN);
+console.log("✅ MP_ACCESS_TOKEN cargado correctamente");
 
 const client = new MercadoPagoConfig({
   accessToken: ACCESS_TOKEN,
@@ -49,7 +49,7 @@ app.post("/crear-preferencia", async (req, res) => {
       auto_return: "approved",
     };
 
-    // 🔹 Forzar log del body antes de crear preferencia
+    // 🔹 Log para depuración
     console.log("📦 Items enviados a Mercado Pago:", items);
 
     const response = await preferenceClient.create({ body: preferenceData });
@@ -84,9 +84,14 @@ app.get("/verificar-pago/:id", async (req, res) => {
     });
   } catch (err) {
     console.error("Error verificando pago:", err);
-    res.status(500).json({ error: "No se pudo verificar el pago", detalle: err.message });
+    res.status(500).json({
+      error: "No se pudo verificar el pago",
+      detalle: err.message,
+    });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Servidor escuchando en puerto ${PORT}`)
+);
